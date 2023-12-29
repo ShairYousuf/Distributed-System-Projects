@@ -1,6 +1,7 @@
 package mr
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net"
@@ -61,6 +62,8 @@ func(t*Task) AssignTask(workerId string){
 func (c * Coordinator) AssignTask(workerId string, task *MapReduceTask) error {
 	c.Mu.Lock()
 	defer c.Mu.Unlock()
+	gob.Register(MapTask{})
+	gob.Register(ReduceTask{})
 
 	if c.MapTasksRemaining !=0 {
 		for _, mt:= range c.MapTasks{
